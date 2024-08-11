@@ -1,0 +1,18 @@
+version: '3'
+services:
+  maildev:
+    expose:
+      - 1080
+    image: maildev/maildev
+    restart: unless-stopped
+    volumes:
+      - data:/app/maildev-data
+    networks:
+      - dokploy-network
+
+volumes:
+  data: {}
+
+networks:
+  dokploy-network:
+    external: true
