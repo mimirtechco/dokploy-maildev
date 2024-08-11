@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     environment:
       - MAILDEV_MAIL_DIRECTORY=/app/maildev-data
+      - MAILDEV_IP=::
+      - TZ=UTC
     volumes:
       - data:/app/maildev-data
     expose:
