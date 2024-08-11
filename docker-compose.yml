@@ -1,14 +1,25 @@
 version: '3'
 services:
   maildev:
-    expose:
-      - 1080
     image: maildev/maildev
     restart: unless-stopped
+    environment:
+      - MAILDEV_MAIL_DIRECTORY=/app/maildev-data
     volumes:
       - data:/app/maildev-data
+    expose:
+    - 1080
+    - 1025
+    ports:
+      - "${MAILDEV_SMTP_PORT}:1025"
     networks:
       - dokploy-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${HASH}.entrypoints=websecure
+      - traefik.http.routers.${HASH}.tls.certresolver=letsencrypt
+      - traefik.http.routers.${HASH}.rule=Host(`${MAILDEV_HOST}`)
+      - traefik.http.services.${HASH}.loadbalancer.server.port=1080
 
 volumes:
   data: {}
